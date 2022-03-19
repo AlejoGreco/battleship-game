@@ -17,6 +17,7 @@ const Cell = ({visible, content}) => {
             height: 40,
             backgroundColor: (visible ? contentColors[content] : 'white'),
             border: '1px solid grey',
+            display: 'inline-block',
             '&:hover': {
                 backgroundColor: 'gray',
                 opacity: [0.9, 0.8, 0.7],
