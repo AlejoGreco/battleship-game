@@ -13,10 +13,12 @@ const Cell = ({visible, content}) => {
   return (
     <Box sx={
         {
-            width: 40,
-            height: 40,
+            width: 50,
+            height: 50,
+            m: 0,
+            p: 0,
             backgroundColor: (visible ? contentColors[content] : 'white'),
-            border: '1px solid grey',
+            outline: '1px solid grey',
             display: 'inline-block',
             '&:hover': {
                 backgroundColor: 'gray',

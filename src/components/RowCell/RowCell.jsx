@@ -4,7 +4,7 @@ import Cell from '../Cell/Cell'
 
 const RowCell = ({row}) => {
   return (
-    <Container>
+    <Container sx={{p : 0, m : 0}}>
         {
             row.map(item => <Cell visible={item.visible} content={item.content}/>)
         }
