@@ -9,9 +9,11 @@ const boardTest = [
     [{visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}]
 ];
 
+const player = 'CPU';
+
 export default {
     title : 'Board',
     component : Board
 }
 
-export const BoardExample = () => <Board matrix={boardTest}/>
+export const BoardExample = () => <Board matrix={boardTest} player={player}/>

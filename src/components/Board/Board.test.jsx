@@ -11,8 +11,13 @@ const boardTest = [
     [{visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}]
 ];
 
+const player = 'CPU';
+
 test('Board render', async () => {
-    const {container} = render(<Board matrix={boardTest}/>);
+    const {container, findByRole} = render(<Board matrix={boardTest} player={player}/>);
     
-    expect(container.firstElementChild.firstElementChild.children).toHaveLength(boardTest.length)
+    const text = await findByRole('heading');
+
+    expect(container.firstElementChild.children[1].children).toHaveLength(boardTest.length);
+    expect(text).toHaveTextContent(player);
 })
