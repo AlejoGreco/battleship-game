@@ -3,14 +3,13 @@ import RowCell from '../RowCell/RowCell'
 import { Container } from '@mui/material'
 import BoardHeader from '../BoardHeader/BoardHeader'
 
-
-const Board = ({matrix, player}) => {
+const Board = ({matrix, playerName, onClickReveal}) => {
 
     return (
         <Container sx={{display : 'inline-block', width : 'auto', p : 0, m : 0}}>
-            <BoardHeader player={player}/>
+            <BoardHeader player={playerName}/>
             <Container sx={{border : '3px solid gray', display : 'inline-block', width : 'auto', p : 0, m : 0}}>
-                {matrix.map(row => <RowCell row={row}/>)}
+                {matrix.map(row => <RowCell row={row} onClickReveal={onClickReveal}/>)}
             </Container>
         </Container>
     )
