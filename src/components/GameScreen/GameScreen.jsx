@@ -5,14 +5,14 @@ import BoxInfo from '../BoxInfo/BoxInfo'
 import { connect } from 'react-redux'
 
 
-const GameScreen = ({playerBoard, cpuBoard, playerName, getCellContent}) => {
+const GameScreen = ({playerBoard, cpuBoard, playerName}) => {
     return (
         <Grid container justifyContent={'end'} rowSpacing={3}>
             <Grid item xs={12} sm={6} xl={4} sx={{display : 'flex', justifyContent : 'center'}} >
-                <Board matrix={playerBoard} playerName={playerName} onClickReveal={getCellContent}/>
+                <Board matrix={playerBoard} playerName={playerName} />
             </Grid>
             <Grid item xs={12} sm={6} xl={4} sx={{display : 'flex', justifyContent : 'center'}}>
-                <Board matrix={cpuBoard} playerName='CPU' onClickReveal={getCellContent}/>
+                <Board matrix={cpuBoard} playerName='CPU' />
             </Grid>
             <Grid item xs={12} sm={6} xl={4} sx={{display : 'flex', justifyContent : 'center'}}>
                 <BoxInfo />
@@ -29,10 +29,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch)=> {
-    return {
-        getCellContent : cell => dispatch({type : 'SHOW_CELL_CONTENT', payload : cell})
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(GameScreen)
+export default connect(mapStateToProps)(GameScreen)

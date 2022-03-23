@@ -3,15 +3,9 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux'
 import GameScreen from './components/GameScreen/GameScreen';
 import initialState from './components/initialState';
+import { newBoardState } from './utils/newBoardState';
 
 const initalValue = initialState;
-
-const newBoardState = (boardMatrix, cellCoors) => {
-    const newBoard = [...boardMatrix];
-    newBoard[cellCoors.row - 1][cellCoors.col - 1].visible = true;
-    return  newBoard;
-        
-}
 
 const reducer = (state = initalValue, action) => {
     switch (action.type){

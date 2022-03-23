@@ -1,6 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { connect } from 'react-redux';
 
 
 const contentColors = {
@@ -10,10 +11,10 @@ const contentColors = {
     destroy : 'error.main'
 }
 
-const Cell = ({visible, content, board, coors, onClickReveal}) => {
+const Cell = ({visible, content, board, coors, getCellContent}) => {
     return (
         <Box 
-        onClick={() => onClickReveal({board, coors})}
+        onClick={() => getCellContent({board, coors})}
         sx={{
                 width: 50,
                 height: 50,
@@ -33,4 +34,10 @@ const Cell = ({visible, content, board, coors, onClickReveal}) => {
     )
 }
 
-export default Cell
+const mapDispatchToProps = (dispatch)=> {
+    return {
+        getCellContent : cell => dispatch({type : 'SHOW_CELL_CONTENT', payload : cell}),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Cell)
