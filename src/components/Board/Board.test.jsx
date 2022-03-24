@@ -1,21 +1,21 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { Provider } from 'react-redux'
+import store from '../../stores/store'
 import Board from './Board'
 
-const boardTest = [
-    [{visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : false, content : 'ship'}],
-    [{visible : false, content : 'water'}, {visible : true, content : 'destroy'}, {visible : true, content : 'destroy'}, {visible : false, content : 'water'}, {visible : true, content : 'hit'}],
-    [{visible : false, content : 'water'}, {visible : false, content : 'water'}, {visible : false, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'hit'}],
-    [{visible : false, content : 'ship'}, {visible : false, content : 'ship'}, {visible : false, content : 'ship'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}],
-    [{visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}]
-];
-
+const boardTest= store.getState().playerBoard;
 
 const player = 'CPU';
 
 test('Board render', async () => {
-    const {container, findByRole} = render(<Board />);
+    const {container, findByRole} = render(
+        <Provider store={store}>
+            <Board matrix={boardTest} playerName={player} />
+        </Provider>
+        
+    );
     
     const text = await findByRole('heading');
 

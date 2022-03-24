@@ -1,18 +1,18 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { Provider } from 'react-redux'
+import store from '../../stores/store'
 import GameScreen from './GameScreen'
 
-const boardTest = [
-    [{visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : false, content : 'ship'}],
-    [{visible : false, content : 'water'}, {visible : true, content : 'destroy'}, {visible : true, content : 'destroy'}, {visible : false, content : 'water'}, {visible : true, content : 'hit'}],
-    [{visible : false, content : 'water'}, {visible : false, content : 'water'}, {visible : false, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'hit'}],
-    [{visible : false, content : 'ship'}, {visible : false, content : 'ship'}, {visible : false, content : 'ship'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}],
-    [{visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}]
-];
+const state = store.getState();
 
 test('Game screen render', () => {
-   //const {container} = render(<GameScreen cpuBoard={boardTest} playerBoard={boardTest} playerName='Alejo'/>)
+    const {container} = render(
+        <Provider store={store}>
+            <GameScreen cpuBoard={state.cpuBoard} playerBoard={state.playerBoard} playerName='Alejo'/>
+        </Provider>
+    )
 
-   //expect(container.firstElementChild.children).toHaveLength(3)
+   expect(container.firstElementChild.children).toHaveLength(3)
 })

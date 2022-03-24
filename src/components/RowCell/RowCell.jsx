@@ -6,7 +6,7 @@ const RowCell = ({row}) => {
   return (
     <Container sx={{p : 0, m : 0, height : '50px'}}>
         {
-            row.map(item => <Cell {...item} key={`${item.coors.row}${item.coors.row}`}/>)
+            row.map(item => <Cell {...item} key={`${item.coors.row}${item.coors.col}`}/>)
         }
     </Container>
   )
