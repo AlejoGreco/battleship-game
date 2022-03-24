@@ -11,10 +11,11 @@ const boardTest = [
     [{visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}, {visible : true, content : 'water'}, {visible : false, content : 'water'}]
 ];
 
+
 const player = 'CPU';
 
 test('Board render', async () => {
-    const {container, findByRole} = render(<Board matrix={boardTest} playerName={player}/>);
+    const {container, findByRole} = render(<Board />);
     
     const text = await findByRole('heading');
 

@@ -2,6 +2,7 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
+import { showCellContentCPU } from '../../actions/actions';
 
 
 const contentColors = {
@@ -11,12 +12,12 @@ const contentColors = {
     destroy : 'error.main'
 }
 
-const Cell = ({visible, content, board, coors, getCellContentFromIA}) => {
+const Cell = ({visible, content, board, coors, getCellContentFromCPU}) => {
     return (
         <Box 
         onClick={   // The dispatch only occurs if the cell belongs to cpu board
             () => {
-                !board && getCellContentFromIA({coors});
+                !board && getCellContentFromCPU({coors});
                 return;
             }}
         sx={{
@@ -40,7 +41,7 @@ const Cell = ({visible, content, board, coors, getCellContentFromIA}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getCellContentFromIA : cell => dispatch({type : 'SHOW_CELL_CONTENT', payload : cell})
+        getCellContentFromCPU : cell => dispatch(showCellContentCPU(cell))
     }
 }
 
