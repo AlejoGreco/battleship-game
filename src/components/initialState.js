@@ -1,6 +1,7 @@
-export default {
+const initialState = {
     playerName: 'Alejo',
-    platerTurn: 'Alejo',
+    playerTurn: 'Alejo',
+    IAFireStatus : [],
     playerBoard:[
         [{visible : false, content : 'water', board : 1, coors : {row : 1, col: 1}}, {visible : false, content : 'water', board : 1, coors : {row : 1, col: 2}}, {visible : false, content : 'water', board : 1, coors : {row : 1, col: 3}}, {visible : false, content : 'water', board : 1, coors : {row : 1, col: 4}}, {visible : false, content : 'water', board : 1, coors : {row : 1, col: 5}}],
         [{visible : false, content : 'water', board : 1, coors : {row : 2, col: 1}}, {visible : false, content : 'water', board : 1, coors : {row : 2, col: 2}}, {visible : false, content : 'water', board : 1, coors : {row : 2, col: 3}}, {visible : false, content : 'water', board : 1, coors : {row : 2, col: 4}}, {visible : false, content : 'water', board : 1, coors : {row : 2, col: 5}}],
@@ -16,3 +17,5 @@ export default {
         [{visible : false, content : 'water', board : 0, coors : {row : 5, col: 1}}, {visible : false, content : 'water', board : 0, coors : {row : 5, col: 2}}, {visible : false, content : 'water', board : 0, coors : {row : 5, col: 3}}, {visible : false, content : 'water', board : 0, coors : {row : 5, col: 4}}, {visible : false, content : 'water', board : 0, coors : {row : 5, col: 5}}]
     ]
 }
+
+export default initialState;

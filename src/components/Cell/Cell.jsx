@@ -11,10 +11,14 @@ const contentColors = {
     destroy : 'error.main'
 }
 
-const Cell = ({visible, content, board, coors, getCellContent}) => {
+const Cell = ({visible, content, board, coors, getCellContentFromIA}) => {
     return (
         <Box 
-        onClick={() => getCellContent({board, coors})}
+        onClick={   // The dispatch only occurs if the cell belongs to cpu board
+            () => {
+                !board && getCellContentFromIA({coors});
+                return;
+            }}
         sx={{
                 width: 50,
                 height: 50,
@@ -34,9 +38,9 @@ const Cell = ({visible, content, board, coors, getCellContent}) => {
     )
 }
 
-const mapDispatchToProps = (dispatch)=> {
+const mapDispatchToProps = dispatch => {
     return {
-        getCellContent : cell => dispatch({type : 'SHOW_CELL_CONTENT', payload : cell}),
+        getCellContentFromIA : cell => dispatch({type : 'SHOW_CELL_CONTENT', payload : cell})
     }
 }
 
