@@ -3,13 +3,9 @@ import Grid from '@mui/material/Grid'
 import Board from './../Board/Board'
 import BoxInfo from '../BoxInfo/BoxInfo'
 import { connect } from 'react-redux'
-import useFireIA from '../../hooks/useFireIA'
-import { showCellContentPlayer } from '../../actions/actions'
 
 
-const GameScreen = ({playerBoard, cpuBoard, playerName, turn, getCellContentFromPlayer, IAfireStatus}) => {
-
-    useFireIA(turn, playerBoard, getCellContentFromPlayer);
+const GameScreen = ({playerBoard, cpuBoard, playerName}) => {
 
     return (
         <Grid container justifyContent={'end'} rowSpacing={3}>
@@ -36,11 +32,4 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        getCellContentFromPlayer : cell => dispatch(showCellContentPlayer(cell))
-    }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameScreen)
+export default connect(mapStateToProps)(GameScreen)

@@ -3,6 +3,5 @@
 export const newBoardState = (boardMatrix, cellCoors) => {
     const newBoard = [...boardMatrix];
     newBoard[cellCoors.row - 1][cellCoors.col - 1].visible = true;
-    return  newBoard;
-        
+    return  newBoard;    
 }
