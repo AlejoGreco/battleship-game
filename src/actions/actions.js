@@ -1,10 +1,10 @@
-export const SHOW_CELL_CONTENT_CPU = 'SHOW_CELL_CONTENT_CPU';
-export const SHOW_CELL_CONTENT_PLAYER = 'SHOW_CELL_CONTENT';
+export const SET_CELL_HIT_CPU = 'SET_CELL_HIT_CPU';
+export const SET_CELL_HIT_PLAYER = 'SET_CELL_HIT_PLAYER';
 
-const showCellContentCPU = cell => ({type : SHOW_CELL_CONTENT_CPU, payload : cell})
-const showCellContentPlayer = () => ({type : SHOW_CELL_CONTENT_PLAYER})
-
-export const showCellsContent = payload => {
+export const setCellHits = payload => ({type : SET_CELL_HIT_CPU, payload})
+export const showCellContentPlayer = payload => ({type : SET_CELL_HIT_PLAYER, payload})
+/*
+export const setHitCells = payload => {
     
     return async dispatch => {
         dispatch(showCellContentCPU(payload))
@@ -17,3 +17,4 @@ export const showCellsContent = payload => {
         )
     }
 }
+*/

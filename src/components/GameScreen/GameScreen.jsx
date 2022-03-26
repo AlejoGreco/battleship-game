@@ -5,15 +5,15 @@ import BoxInfo from '../BoxInfo/BoxInfo'
 import { connect } from 'react-redux'
 
 
-const GameScreen = ({playerBoard, cpuBoard, playerName}) => {
+const GameScreen = ({playerName}) => {
 
     return (
         <Grid container justifyContent={'end'} rowSpacing={3}>
             <Grid item xs={12} sm={6} sx={{display : 'flex', justifyContent : 'center'}} >
-                <Board matrix={playerBoard} playerName={playerName} />
+                <Board board={1} playerName={playerName} />
             </Grid>
             <Grid item xs={12} sm={6} sx={{display : 'flex', justifyContent : 'center'}}>
-                <Board matrix={cpuBoard} playerName='CPU' />
+                <Board board={0} playerName='CPU' />
             </Grid>
             <Grid item xs={12} sm={6} sx={{display : 'flex', justifyContent : 'center'}}>
                 <BoxInfo />
@@ -24,8 +24,6 @@ const GameScreen = ({playerBoard, cpuBoard, playerName}) => {
 
 const mapStateToProps = state => {
     return {
-        playerBoard  : state.playerBoard,
-        cpuBoard     : state.cpuBoard,
         playerName   : state.playerName,
         turn         : state.playerTurn,
         IAfireStatus : state.IAfireStatus 

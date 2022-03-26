@@ -1,31 +1,62 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
-import { showCellsContent } from '../../actions/actions';
+import { setCellHits } from '../../actions/actions';
 
 
 const contentColors = {
+    hidden : 'white',
     water : 'primary.light',
     ship : 'gray',
     hit : 'warning.light',
     destroy : 'error.main'
 }
 
-const Cell = ({visible, content, board, coors, getCellContent}) => {
+const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit}) => {
+    
+    const [cell, setCell] = useState({});
+    const [cellStatus, setCellStatus] = useState(contentColors['hidden']) 
+
+    useEffect(() => {
+        const coors = parseInt('' + row + col);
+        
+        let ship;
+        board 
+        ?
+            ship = playerShipsCoors.find(ship => ship[coors])
+        :
+            ship = cpuShipsCoors.find(ship => ship[coors])
+        ship ? ship = true : ship = false
+
+        setCell({board, coors : coors, ship});    
+    }, [playerShipsCoors, cpuShipsCoors, board, row, col])
+
+    // sacar de aca despues
+    const onClickCell = () => {
+        if(!cell.board)
+        {
+            setHit(cell)
+            cell.ship 
+                ? 
+                    setCellStatus(contentColors['hit'])    
+                :
+                    setCellStatus(contentColors['water'])
+            
+        }
+    }
+
     return (
         <Box 
         onClick={   // The dispatch only occurs if the cell belongs to cpu board
-            () => {
-                !board && getCellContent({coors});
-                return;
-            }}
+                onClickCell
+            }
         sx={{
                 width: 50,
                 height: 50,
                 m: 0,
                 p: 0,
-                backgroundColor: (visible ? contentColors[content] : 'white'),
+                backgroundColor: (cellStatus),
                 outline: '1px solid grey',
                 display: 'inline-block',
                 '&:hover': {
@@ -34,15 +65,22 @@ const Cell = ({visible, content, board, coors, getCellContent}) => {
                 }
             }
         }>
-            <Typography variant='span' display={'none'}>{ visible ? content : '-' }</Typography>
+            <Typography variant='span' display={'none'}>{'-'}</Typography>
         </Box>
     )
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getCellContent : cell => dispatch(showCellsContent(cell))
+        setHit  : payload => dispatch(setCellHits(payload))
     }
 }
 
-export default connect(null, mapDispatchToProps)(Cell)
+const mapStateToProps = state => {
+    return {
+        playerShipsCoors : state.playerShipsCoors,
+        cpuShipsCoors    : state.playerShipsCoors
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cell)
