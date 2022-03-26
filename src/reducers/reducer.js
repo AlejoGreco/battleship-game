@@ -28,6 +28,36 @@ const reducer = (state = initialState, action) => {
             break;
         case SET_CELL_HIT_PLAYER:
             // The cell to show is on PLAYER board
+            
+            if(state.IAFireStatus.hitArray.length > 0)
+            {
+
+            }
+            else
+            {
+                // Random fire calculation
+                const newCoors = randomCoorsCalculation(state.playerFreeCoors);
+
+                // It generated of new free player coors with out the last coords calculation
+                const newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
+                
+                const shipStateToUpdate = state.playerShipsCoors.find(ship => ship[newCoors]);
+                if(shipStateToUpdate)
+                {
+                    // It was an hit
+                    const newShipsState = state.playerShipsCoors.filter(ship => !ship[newCoors]);
+                    state = {
+                        ...state, 
+                        playerFreeCoors: newFreePlayerCoors,
+                        playerShipsCoors:[...newShipsState, {...shipStateToUpdate, [newCoors] : 'hit'}]
+                    }
+                }       
+                else
+                {
+                    // It was not a hit
+                    state = {...state, playerFreeCoors: newFreePlayerCoors, playerWaterCoors : [...state.playerWaterCoors, newCoors]}
+                }
+            }
             break;
         default:
             break;

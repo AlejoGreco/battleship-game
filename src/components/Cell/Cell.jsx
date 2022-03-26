@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
-import { setCellHits } from '../../actions/actions';
+import { setHitCells } from '../../actions/actions';
 
 
 const contentColors = {
@@ -22,11 +22,14 @@ const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit}) => {
         const coors = parseInt('' + row + col);
         
         let ship;
-        board 
-        ?
+        if(board)
+        {
             ship = playerShipsCoors.find(ship => ship[coors])
-        :
+        }
+        else
+        {
             ship = cpuShipsCoors.find(ship => ship[coors])
+        }
         ship ? ship = true : ship = false
 
         setCell({board, coors : coors, ship});    
@@ -72,7 +75,7 @@ const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setHit  : payload => dispatch(setCellHits(payload))
+        setHit  : payload => dispatch(setHitCells(payload))
     }
 }
 
