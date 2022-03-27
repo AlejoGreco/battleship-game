@@ -1,8 +1,5 @@
 import initialState from "./initialState";
-import { newBoardState } from "../utils/newBoardState";
 import randomCoorsCalculation from "../utils/randomCoorsCalculation";
-import findFreeNextHitCells from '../utils/findFreeNextHitCells'
-import { findFreeCells } from "../utils/findFreeCells"
 import { SET_CELL_HIT_CPU, SET_CELL_HIT_PLAYER } from "../actions/actions";
 
 const reducer = (state = initialState, action) => {
@@ -18,12 +15,13 @@ const reducer = (state = initialState, action) => {
                 
                 state = {
                     ...state, 
+                    updateCells : [{board : 0, [coors] : 'hit'}],
                     cpuShipsCoors:[...newShipsState, {...shipStateToUpdate, [coors] : 'hit'}]
                 }
             }    
             else
             {
-                state = {...state, cpuWaterCoors : [...state.cpuWaterCoors, coors]}
+                state = {...state, updateCells : [{board : 0, [coors] : 'water'}], cpuWaterCoors : [...state.cpuWaterCoors, coors]}
             }
             break;
         case SET_CELL_HIT_PLAYER:
@@ -48,6 +46,7 @@ const reducer = (state = initialState, action) => {
                     const newShipsState = state.playerShipsCoors.filter(ship => !ship[newCoors]);
                     state = {
                         ...state, 
+                        updateCells : [{board : 1, [newCoors] : 'hit'}],
                         playerFreeCoors: newFreePlayerCoors,
                         playerShipsCoors:[...newShipsState, {...shipStateToUpdate, [newCoors] : 'hit'}]
                     }
@@ -55,7 +54,7 @@ const reducer = (state = initialState, action) => {
                 else
                 {
                     // It was not a hit
-                    state = {...state, playerFreeCoors: newFreePlayerCoors, playerWaterCoors : [...state.playerWaterCoors, newCoors]}
+                    state = {...state, updateCells : [{board : 1, [newCoors] : 'water'}],playerFreeCoors: newFreePlayerCoors, playerWaterCoors : [...state.playerWaterCoors, newCoors]}
                 }
             }
             break;

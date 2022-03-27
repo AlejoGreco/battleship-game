@@ -13,7 +13,7 @@ const contentColors = {
     destroy : 'error.main'
 }
 
-const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit}) => {
+const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit, updateCells}) => {
     
     const [cell, setCell] = useState({});
     const [cellStatus, setCellStatus] = useState(contentColors['hidden']) 
@@ -35,31 +35,31 @@ const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit}) => {
         setCell({board, coors : coors, ship});    
     }, [playerShipsCoors, cpuShipsCoors, board, row, col])
 
-    // sacar de aca despues
-    const onClickCell = () => {
-        if(!cell.board)
+    useEffect(() => {
+        const {board, coors} = cell;
+        console.log(cellStatus)
+        let update;
+        if(updateCells.length > 0)
         {
-            setHit(cell)
-            cell.ship 
-                ? 
-                    setCellStatus(contentColors['hit'])    
-                :
-                    setCellStatus(contentColors['water'])
-            
-        }
-    }
+            if(board === updateCells[0].board)
+            {
+                if(updateCells[0][coors]!== undefined) 
+                    update = updateCells[0][coors]; 
+            }
+        }       
+        
+        setCellStatus(update ? contentColors[update] : cellStatus)
+    }, [updateCells, cell, cellStatus])
 
     return (
         <Box 
-        onClick={   // The dispatch only occurs if the cell belongs to cpu board
-                onClickCell
-            }
+        onClick={() =>  setHit(cell)}// The dispatch only occurs if the cell belongs to cpu board
         sx={{
                 width: 50,
                 height: 50,
                 m: 0,
                 p: 0,
-                backgroundColor: (cellStatus),
+                backgroundColor: cellStatus,
                 outline: '1px solid grey',
                 display: 'inline-block',
                 '&:hover': {
@@ -82,7 +82,8 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
     return {
         playerShipsCoors : state.playerShipsCoors,
-        cpuShipsCoors    : state.playerShipsCoors
+        cpuShipsCoors    : state.playerShipsCoors,
+        updateCells      : state.updateCells
     }
 }
 
