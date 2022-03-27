@@ -1,111 +1,72 @@
 import initialState from "./initialState";
-import randomCoorsCalculation from "../utils/randomCoorsCalculation";
 import { SET_CELL_HIT_CPU, SET_CELL_HIT_PLAYER } from "../actions/actions";
-import findPossibleHitCells from "../utils/findPossibleHitCells";
-import { checkIfAreFreeCells } from "../utils/checkIfAreFreeCells";
+import { processPayload } from "../utils/processPayload";
+import { processMissPayload } from "../utils/processMissPayload";
+import { newCoorsCalc } from "../utils/newCoorsCalc";
 
 const reducer = (state = initialState, action) => {
     switch (action.type)
     {
         case SET_CELL_HIT_CPU:
             // The cell to update is on CPU board
-            const { ship, coors } = action.payload;
-            if(ship)
-            {   
+            const { coors } = action.payload;
+            
+            // Find if it was a hit
+            const [result_, newFireStatus_, newUpdateCells_, newShipsState_, newShipState_] = processPayload(state.cpuShipsCoors, state.playerFireStatus, coors)
+            if(result_)
+            {    
                 // It was a hit
-                const newShipsState = state.cpuShipsCoors.filter(ship => !ship[coors]);     // Ships that weren't hitted
-                const shipStateToUpdate = state.cpuShipsCoors.find(ship => ship[coors])     // Hit ship 
-                const newPlayerFireStatus = [...state.playerFireStatus, coors];
-                shipStateToUpdate.hits = shipStateToUpdate.hits + 1;
-
-                if(shipStateToUpdate.hits === shipStateToUpdate.length)
-                {
-                    // The ship was destroy
-                    newPlayerFireStatus.forEach( coor => shipStateToUpdate[coor] = 'destroy');
-                    const newUpdateCells = newPlayerFireStatus.map(coor => ({[coor] : 'destroy'}));
-                    state = {
-                        ...state, 
-                        playerFireStatus : [],
-                        updateCells : {board : 0, cells : newUpdateCells},
-                        cpuShipsCoors:[...newShipsState, {...shipStateToUpdate}]
-                    }
+                state = {
+                    ...state, 
+                    playerFireStatus : newFireStatus_,
+                    updateCells : {board : 0, cells : newUpdateCells_},
+                    cpuShipsCoors:[...newShipsState_, {...newShipState_}]
                 }
-                else
-                {
-                    // The ship not was destroy
-                    state = {
-                        ...state, 
-                        playerFireStatus : newPlayerFireStatus,
-                        updateCells : {board : 0, cells : [{[coors] : 'hit'}]},
-                        cpuShipsCoors:[...newShipsState, {...shipStateToUpdate, [coors] : 'hit'}]
-                    }
-                }
-            }    
+            } 
             else
             {
                 // Miss shoot
-                state = {...state, updateCells : {board : 0, cells : [{[coors] : 'water'}]}, cpuWaterCoors : [...state.cpuWaterCoors, coors]}
+                const [newUpdateCells, newWaterCoors] = processMissPayload(state.cpuWaterCoors, coors)
+                
+                state = {
+                    ...state, 
+                    updateCells : {board : 0, cells : newUpdateCells},
+                    cpuWaterCoors : newWaterCoors
+                }
             }
             break;
         case SET_CELL_HIT_PLAYER:
             // The cell to show is on PLAYER board
-            let newFreePlayerCoors; 
-            let shipStateToUpdate;
-            let newCoors;
-
-            if(state.IAFireStatus.length > 0)
-            {
-                const aux = findPossibleHitCells(state.IAFireStatus);
-                newCoors = randomCoorsCalculation(checkIfAreFreeCells(state.playerFreeCoors, aux));
-            }
-            else
-            {
-                // Random fire coors calculation
-                newCoors = randomCoorsCalculation(state.playerFreeCoors);
-            }
+            const newCoors = newCoorsCalc(state.IAFireStatus, state.playerFreeCoors)
+            
             // It generated of new free player coors with out the last coords calculation
-            newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
+            const newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
             
             // Find if it was a hit
-            shipStateToUpdate = state.playerShipsCoors.find(ship => ship[newCoors]);
-
-            if(shipStateToUpdate)
-            {
+            const [result, newFireStatus, newUpdateCells, newShipsState, newShipState] = processPayload(state.playerShipsCoors, state.IAFireStatus, newCoors)
+            if(result)
+            {    
                 // It was a hit
-                const newShipsState = state.playerShipsCoors.filter(ship => !ship[newCoors]);   // Ships that weren't hitted
-                const newIAFireStatus = [...state.IAFireStatus, newCoors];
-                shipStateToUpdate.hits = shipStateToUpdate.hits + 1;
-                if(shipStateToUpdate.hits === shipStateToUpdate.length)
-                {
-                    // The ship was destroy
-                    newIAFireStatus.forEach( coor => shipStateToUpdate[coor] = 'destroy');
-                    const newUpdateCells = newIAFireStatus.map(coor => ({[coor] : 'destroy'}));
-                    state = {
-                        ...state, 
-                        IAFireStatus : [],
-                        playerFreeCoors: newFreePlayerCoors,
-                        updateCells : {board : 1, cells : newUpdateCells},
-                        playerShipsCoors:[...newShipsState, {...shipStateToUpdate}]
-                    }
-                }
-                else
-                {
-                    // The ship was not destroy
-                    state = {
-                        ...state, 
-                        updateCells : {board : 1, cells : [{[newCoors] : 'hit'}]},
-                        IAFireStatus : newIAFireStatus,
-                        playerFreeCoors: newFreePlayerCoors,
-                        playerShipsCoors:[...newShipsState, {...shipStateToUpdate, [newCoors] : 'hit'}]
-                    }
+                state = {
+                    ...state, 
+                    IAFireStatus : newFireStatus,
+                    playerFreeCoors: newFreePlayerCoors,
+                    updateCells : {board : 1, cells : newUpdateCells},
+                    playerShipsCoors:[...newShipsState, {...newShipState}]
                 }
             }       
             else
             {
                 // It was not a hit
-                state = {...state, updateCells : {board : 1, cells : [{[newCoors] : 'water'}]},playerFreeCoors: newFreePlayerCoors, playerWaterCoors : [...state.playerWaterCoors, newCoors]}
+                const [newUpdateCells, newWaterCoors] = processMissPayload(state.playerWaterCoors, newCoors)
+                
+                state = {
+                    ...state, 
+                    updateCells : {board : 1, cells : newUpdateCells},
+                    playerFreeCoors: newFreePlayerCoors, 
+                    playerWaterCoors : newWaterCoors
+                }
             }
-
             break;
         default:
             break;
