@@ -24,18 +24,17 @@ const useCellsState = (playerShipsCoors, cpuShipsCoors, board, row, col, updateC
 
     useEffect(() => {
         const {board, coors} = cell;
-        console.log(cellStatus)
         let update;
-        if(updateCells.length > 0)
+
+        if(updateCells)
         {
-            if(board === updateCells[0].board)
+            if(board === updateCells.board)
             {
-                if(updateCells[0][coors]!== undefined) 
-                    update = updateCells[0][coors]; 
+                update = updateCells.cells.find(c => c[coors])
             }
         }       
         
-        setCellStatus(update ? contentColors[update] : cellStatus)
+        setCellStatus(update ? contentColors[update[coors]] : cellStatus)
     }, [updateCells, cell, cellStatus])
 
     return [cell, cellStatus]

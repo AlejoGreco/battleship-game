@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
 import { setHitCells } from '../../actions/actions';
 import useCellsState from '../../hooks/setCellsState';
+import { contentColors } from '../../constants/constants';
 
 
 const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit, updateCells}) => {
@@ -12,7 +13,7 @@ const Cell = ({board, row, col, playerShipsCoors, cpuShipsCoors, setHit, updateC
 
     return (
         <Box 
-        onClick={() =>  setHit(cell)}// The dispatch only occurs if the cell belongs to cpu board
+        onClick={() =>  cellStatus === contentColors['hidden'] && setHit(cell)}// The dispatch only occurs if the cell belongs to cpu board
         sx={{
                 width: 50,
                 height: 50,
