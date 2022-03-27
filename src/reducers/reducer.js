@@ -1,6 +1,8 @@
 import initialState from "./initialState";
 import randomCoorsCalculation from "../utils/randomCoorsCalculation";
 import { SET_CELL_HIT_CPU, SET_CELL_HIT_PLAYER } from "../actions/actions";
+import findPossibleHitCells from "../utils/findPossibleHitCells";
+import { checkIfAreFreeCells } from "../utils/checkIfAreFreeCells";
 
 const reducer = (state = initialState, action) => {
     switch (action.type)
@@ -31,21 +33,22 @@ const reducer = (state = initialState, action) => {
             let shipStateToUpdate;
             let newCoors;
 
-            if(state.IAFireStatus.hitArray.length > 0)
+            if(state.IAFireStatus.length > 0)
             {
-
+                const aux = findPossibleHitCells(state.IAFireStatus);
+                
+                newCoors = randomCoorsCalculation(checkIfAreFreeCells(state.playerFreeCoors, aux));
             }
             else
             {
                 // Random fire coors calculation
                 newCoors = randomCoorsCalculation(state.playerFreeCoors);
-
-                // It generated of new free player coors with out the last coords calculation
-                newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
-                
-                // Find if it was a hit
-                shipStateToUpdate = state.playerShipsCoors.find(ship => ship[newCoors]);
             }
+            // It generated of new free player coors with out the last coords calculation
+            newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
+            
+            // Find if it was a hit
+            shipStateToUpdate = state.playerShipsCoors.find(ship => ship[newCoors]);
 
             if(shipStateToUpdate)
             {
@@ -54,6 +57,7 @@ const reducer = (state = initialState, action) => {
                 state = {
                     ...state, 
                     updateCells : [{board : 1, [newCoors] : 'hit'}],
+                    IAFireStatus : [...state.IAFireStatus, newCoors],
                     playerFreeCoors: newFreePlayerCoors,
                     playerShipsCoors:[...newShipsState, {...shipStateToUpdate, [newCoors] : 'hit'}]
                 }

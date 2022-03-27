@@ -3,7 +3,7 @@ import RowCell from '../RowCell/RowCell'
 import { Container } from '@mui/material'
 import BoardHeader from '../BoardHeader/BoardHeader'
 
-const rowsGenerator = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const rowsGenerator = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const Board = ({board, playerName}) => {
 
