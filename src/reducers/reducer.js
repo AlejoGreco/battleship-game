@@ -10,8 +10,9 @@ const reducer = (state = initialState, action) => {
             const { ship, coors } = action.payload;
             if(ship)
             {   
-                const newShipsState = state.cpuShipsCoors.filter(ship => !ship[coors]);
-                const shipStateToUpdate = state.cpuShipsCoors.find(ship => ship[coors])
+
+                const newShipsState = state.cpuShipsCoors.filter(ship => !ship[coors]);     // Ships that weren't hitted
+                const shipStateToUpdate = state.cpuShipsCoors.find(ship => ship[coors])     // Hit ship
                 
                 state = {
                     ...state, 
@@ -26,37 +27,43 @@ const reducer = (state = initialState, action) => {
             break;
         case SET_CELL_HIT_PLAYER:
             // The cell to show is on PLAYER board
-            
+            let newFreePlayerCoors; 
+            let shipStateToUpdate;
+            let newCoors;
+
             if(state.IAFireStatus.hitArray.length > 0)
             {
 
             }
             else
             {
-                // Random fire calculation
-                const newCoors = randomCoorsCalculation(state.playerFreeCoors);
+                // Random fire coors calculation
+                newCoors = randomCoorsCalculation(state.playerFreeCoors);
 
                 // It generated of new free player coors with out the last coords calculation
-                const newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
+                newFreePlayerCoors = state.playerFreeCoors.filter(c => c !== newCoors);
                 
-                const shipStateToUpdate = state.playerShipsCoors.find(ship => ship[newCoors]);
-                if(shipStateToUpdate)
-                {
-                    // It was an hit
-                    const newShipsState = state.playerShipsCoors.filter(ship => !ship[newCoors]);
-                    state = {
-                        ...state, 
-                        updateCells : [{board : 1, [newCoors] : 'hit'}],
-                        playerFreeCoors: newFreePlayerCoors,
-                        playerShipsCoors:[...newShipsState, {...shipStateToUpdate, [newCoors] : 'hit'}]
-                    }
-                }       
-                else
-                {
-                    // It was not a hit
-                    state = {...state, updateCells : [{board : 1, [newCoors] : 'water'}],playerFreeCoors: newFreePlayerCoors, playerWaterCoors : [...state.playerWaterCoors, newCoors]}
-                }
+                // Find if it was a hit
+                shipStateToUpdate = state.playerShipsCoors.find(ship => ship[newCoors]);
             }
+
+            if(shipStateToUpdate)
+            {
+                // It was a hit
+                const newShipsState = state.playerShipsCoors.filter(ship => !ship[newCoors]);
+                state = {
+                    ...state, 
+                    updateCells : [{board : 1, [newCoors] : 'hit'}],
+                    playerFreeCoors: newFreePlayerCoors,
+                    playerShipsCoors:[...newShipsState, {...shipStateToUpdate, [newCoors] : 'hit'}]
+                }
+            }       
+            else
+            {
+                // It was not a hit
+                state = {...state, updateCells : [{board : 1, [newCoors] : 'water'}],playerFreeCoors: newFreePlayerCoors, playerWaterCoors : [...state.playerWaterCoors, newCoors]}
+            }
+
             break;
         default:
             break;

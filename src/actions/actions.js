@@ -7,13 +7,15 @@ const setCellHitsPlayer = () => ({type : SET_CELL_HIT_PLAYER})
 export const setHitCells = payload => {
     
     return async dispatch => {
+        // Sincronic accion for update board cpu (player's shoot)
         dispatch(setCellHitsCPU(payload))
-
+        
         return new Promise(resolve => 
             {
                 window.setTimeout(() => resolve(), 2000)
             })
             .then(() => dispatch(setCellHitsPlayer())            
+            // Asincronic accion for update player board(cps's shoot)
         )
     }
 }
