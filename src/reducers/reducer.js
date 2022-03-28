@@ -1,10 +1,10 @@
 import initialState from "./initialState";
-import { SET_CELL_HIT_CPU, SET_CELL_HIT_PLAYER } from "../actions/actions";
+import { SET_CELL_HIT_CPU, SET_CELL_HIT_PLAYER, RESET_MSG, SET_MSG } from "../constants/constants";
 import { processPayload } from "../utils/processPayload";
 import { processMissPayload } from "../utils/processMissPayload";
 import { newCoorsCalc } from "../utils/newCoorsCalc";
 
-const reducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
     switch (action.type)
     {
         case SET_CELL_HIT_CPU:
@@ -68,10 +68,20 @@ const reducer = (state = initialState, action) => {
                 }
             }
             break;
+        case SET_MSG:
+            const cell = action.payload.cells[0];
+            let msg = '';
+            if(cell){
+                const coorsIterator = [...Array(100).keys()];
+                msg = cell[coorsIterator.find(coor => cell[coor])];
+            }            
+            state = {...state, userMessage : msg}
+            break;
+        case RESET_MSG:
+            state = {...state, userMessage : ''}
+            break;
         default:
             break;
     }
     return state;
 }
-
-export default reducer;

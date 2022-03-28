@@ -6,23 +6,14 @@ const useCellsState = (playerShipsCoors, cpuShipsCoors, board, row, col, updateC
     const [cellStatus, setCellStatus] = useState(contentColors['hidden']);
 
     useEffect(() => {
+        // This effect sets the location information for the cells
         const coors = parseInt('' + row + col);
-        
-        let ship;
-        if(board)
-        {
-            ship = playerShipsCoors.find(ship => ship[coors])
-        }
-        else
-        {
-            ship = cpuShipsCoors.find(ship => ship[coors])
-        }
-        ship ? ship = true : ship = false
 
-        setCell({board, coors : coors, ship});    
+        setCell({board, coors : coors});    
     }, [playerShipsCoors, cpuShipsCoors, board, row, col])
 
     useEffect(() => {
+        // Sets the cell's state (hidden/hit/destroy)
         const {board, coors} = cell;
         let update;
 

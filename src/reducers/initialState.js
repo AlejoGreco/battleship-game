@@ -1,6 +1,7 @@
 const initialState = {
     playerName: 'Alejo',
     playerTurn: 'Alejo',
+    userMessage: '',
     IAFireStatus : [],
     playerFireStatus : [],
     playerShipsCoors:

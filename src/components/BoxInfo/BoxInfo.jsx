@@ -1,6 +1,7 @@
 import React from 'react'
 import Container from '@mui/material/Container'
 import { Typography, Button } from '@mui/material'
+import { connect } from 'react-redux'
 
 const BoxInfo = ({turn}) => {
   return (
@@ -32,4 +33,9 @@ const BoxInfo = ({turn}) => {
   )
 }
 
-export default BoxInfo
+const mapStateToProps = state => {
+    return {
+        turn : state.playerTurn
+    }
+}
+export default connect(mapStateToProps)(BoxInfo)

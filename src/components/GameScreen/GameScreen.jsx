@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import Board from './../Board/Board'
 import BoxInfo from '../BoxInfo/BoxInfo'
 import { connect } from 'react-redux'
+import { sendPlayMsg } from '../../actions/actions'
 
 
-const GameScreen = ({playerName}) => {
+const GameScreen = ({playerName, lastShoot, setPlayMsg}) => {
+    useEffect(()=> {
+        setPlayMsg({...lastShoot})
+    }, [lastShoot, setPlayMsg])
 
     return (
         <Grid container justifyContent={'end'} rowSpacing={3}>
@@ -26,8 +30,14 @@ const mapStateToProps = state => {
     return {
         playerName   : state.playerName,
         turn         : state.playerTurn,
-        IAfireStatus : state.IAfireStatus 
+        lastShoot    : state.updateCells
     }
 }
 
-export default connect(mapStateToProps)(GameScreen)
+const mapDispatchToProps = dispatch => {
+    return {
+        setPlayMsg : payload => dispatch(sendPlayMsg(payload))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameScreen)

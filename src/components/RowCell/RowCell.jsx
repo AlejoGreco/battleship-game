@@ -2,7 +2,7 @@ import React from 'react'
 import Container from '@mui/material/Container'
 import Cell from '../Cell/Cell'
 
-const colsGenerator = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const colsGenerator = [...Array(10).keys()];
 
 const RowCell = ({board, row}) => {
   return (
